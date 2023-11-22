@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders</title>
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+
+    .container-fluid {
+      padding: 50px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .table {
+      margin-bottom: 0;
+    }
+
+    th,
+    td {
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .status-pending {
+      color: #ff9800;
+    }
+
+    .status-completed {
+      color: #4caf50;
+    }
+
+    .btn-supplied {
+      background-color: #4caf50;
+      color: #fff;
+    }
+
+
+    .navbar-brand {
+      font-weight: bold;
+    }
+    .navbar-nav .nav-link {
+      color: #fff;
+    }
+    .navbar-nav .nav-link:hover {
+      opacity: 0.8;
+    }
+    .navbar-custom {
+      background: linear-gradient(to right, #5D26C1, #a17fe0);
+    }
+
+    .fixed-top {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  height: 60px; /* Adjust the height as needed */
+}
+  </style>
+</head>
+
+<body>
+
+
+
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/api/supplier/orders">Easy Mart</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/api/bank/login">Bank</a>
+          </li>
+          
+
+          <li class="nav-item">
+            <a class="nav-link" href="/api/supplier/login">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+
+  <div class="container-fluid " style="margin-top: 50px;">
+    <h1>Orders</h1>
+    <div class="table-responsive">
+      <table class="table  table-bordered">
+        <thead>
+          <tr>
+            <th style="width: 10%;">Order ID</th>
+            <th style="width: 20%;">Customer</th>
+            <th style="width: 10%;">Macbook m1 air</th>
+            <th style="width: 10%;">Iphone 11</th>
+            <th style="width: 10%;">Apple Airpod</th>
+            <th style="width: 10%;">Amount</th>
+            <th style="width: 10%;">Status</th>
+            <th style="width: 20%;">Info</th>
+            <th style="width: 10%;">Created On</th>
+            <th style="width: 10%;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+            <% for (let i = 0; i < orders.length; i++) { %>
+                <% const order = orders[i]; %>
+                <tr>
+                  <td><%= order._id %></td>
+                  <td><%= names[i] %></td>
+                  <td><%= order.quantity1 %></td>
+                  <td><%= order.quantity2 %></td>
+                  <td><%= order.quantity3 %></td>
+                  <td><%= order.amount %></td>
+                  <td>
+                    <% if (order.status === 'pending') { %>
+                      <span class="status-pending">Pending</span>
+                    <% } else if (order.status === 'completed') { %>
+                      <span class="status-completed">Completed</span>
+                    <% } else if (order.status === 'rejected') { %>
+                      <span style="color: red;">Rejected</span>
+                    <% } else if (order.status === 'supplied') { %>
+                      <span class="status-completed">Supplied</span>
+                    <% } else if (order.status === 'accepted') { %>
+                      <span class="status-completed">Accepted</span>
+                    <% } %>
+                  </td>
+                  <td><%= order.info %></td>
+                  <td><%= order.createdOn %></td>
+                  <td>
+                    <% if (order.status !== 'supplied') { %>
+                      <% if (order.status === 'pending') { %>
+                        <form action="/api/supplier/orders/accept" method="POST">
+                          <input type="hidden" name="orderId" value="<%= order._id %>">
+                          <button type="submit" class="btn btn-sm btn-success">Accept</button>
+                        </form>
+                        <form action="/api/supplier/orders/reject" method="POST">
+                          <input type="hidden" name="orderId" value="<%= order._id %>">
+                          <button type="submit" class="btn btn-sm btn-danger" style="margin-top: 5px;">Reject</button>
+                        </form>
+                      <% } else if (order.status === 'accepted') { %>
+                        <form action="/api/supplier/orders/supplied" method="POST">
+                          <input type="hidden" name="orderId" value="<%= order._id %>">
+                          <button type="submit" class="btn btn-sm btn-success">Supplied</button>
+                        </form>
+                      <% } %>
+                    <% } %>
+                  </td>
+                </tr>
+              <% } %>
+              
+              
+        </tbody>
+      </table>
+    </div>
+ 
+</div>
+
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+</html>

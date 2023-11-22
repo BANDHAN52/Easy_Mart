@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <style>
+    /* Custom styles */
+    .navbar-brand {
+      font-weight: bold;
+    }
+
+    .navbar-nav .nav-link {
+      color: #fff;
+    }
+
+    .navbar-nav .nav-link:hover {
+      opacity: 0.8;
+    }
+
+    .navbar-custom {
+      background: linear-gradient(to right, #5D26C1, #a17fe0);
+    }
+
+    .rating {
+      color: #f1c40f;
+    }
+
+    .star {
+      font-size: 20px;
+      color: gold;
+    }
+
+    .star.empty {
+      color: gray;
+    }
+
+    .star.empty.ash {
+      color: gray;
+    }
+
+    .rating-text {
+      font-size: 16px;
+      color: gray;
+      margin-left: 5px;
+    }
+
+    .cart-icon {
+      position: relative;
+      background-color: white;
+      border-radius: 50%;
+      padding: 5px;
+    }
+
+    .cart-badge {
+      background-color: #ff0000;
+      /* Set the background color for the badge */
+      color: #ffffff;
+      /* Set the text color for the badge */
+      border-radius: 50%;
+      /* Add a circular shape to the badge */
+      padding: 4px 8px;
+      /* Adjust the padding as needed */
+    }
+
+    .cart-badge:hover {
+      background-color: #f8f9fa;
+    }
+  </style>
+
+
+</head>
+
+<body>
+
+
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+    <div class="container-fluid" style="padding-right: 80px; padding-left: 80px;">
+      <a class="navbar-brand" style="margin-right: 100px;" href="/api/user/home">Easy Mart</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <form class="d-flex flex-grow-1 justify-content-center">
+        <input class="form-control form-control-lg me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-light" type="submit">Search</button>
+      </form>
+
+      <form id="cartForm" action="/api/user/cart" method="GET">
+        <input id="quantityInput1" type="hidden" name="quantity1" value="">
+        <input id="quantityInput2" type="hidden" name="quantity2" value="">
+        <input id="quantityInput3" type="hidden" name="quantity3" value="">
+        <button type="submit" class="nav-link" style="border: none; background: none; margin-left: 30px;">
+          <img src="/images/cart_icon.png" alt="Cart" width="32" height="32" class="cart-icon" title="cart">
+          <span class="badge bg-secondary cart-badge"></span>
+        </button>
+      </form>
+
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+
+          <li class="nav-item dropdown">
+
+            <% if(usersName){ %>
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <%= usersName %>
+              </a>
+              <% }else{ %>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  not user
+                </a>
+                <% } %>
+
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="/api/user/orders">Orders</a></li>
+                    <li><a class="dropdown-item" href="/api/bank/login">Bank</a></li>
+                    <li><a class="dropdown-item" href="#">Edit Profile</a></li>
+                    <li><a class="dropdown-item" href="#">Help</a></li>
+                    <li><a class="dropdown-item" href="#">About</a></li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="/" onclick="confirmLogout()">Logout</a>
+                    </li>
+                  </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="container-fluid mt-5" style="padding-left: 100px; padding-right: 100px;">
+    <h1 class="mb-4" style="text-align: center; margin-bottom: 50px;">Welcome</h1>
+    <h3 class="mb-4">Products</h3>
+    <div class="row ">
+
+      <div class="col-md-4 ">
+        <div id="product1Carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="/<%= products[0].images[0] %>" class="card-img-top" alt="Product 1 Image 1">
+            </div>
+            <div class="carousel-item">
+              <img src="/<%= products[0].images[1] %>" class="card-img-top" alt="Product 1 Image 2">
+            </div>
+            <div class="carousel-item">
+              <img src="/<%= products[0].images[2] %>" class="card-img-top" alt="Product 1 Image 3">
+            </div>
+          </div>
+          <a class="carousel-control-prev" href="#product1Carousel" role="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#product1Carousel" role="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </a>
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= products[0].title %>
+            </h5>
+            <p class="card-text">Price: $<%= products[0].price %>
+            </p>
+
+            <div class="rating">
+              <% const rating=products[0].rating; %>
+                <% const wholeStars=Math.floor(rating); %>
+                  <% const decimalPart=rating % 1; %>
+                    <% for (let i=0; i < wholeStars; i++) { %>
+                      <span class="star">&#9733;</span>
+                      <% } %>
+                        <% if (decimalPart> 0) { %>
+                          <span class="star empty">&#9733;</span>
+                          <% } else { %>
+                            <span class="star empty ash">&#9733;</span>
+                            <% } %>
+                              <span class="rating-text">(<%= rating %>)</span>
+            </div>
+
+            <p class="card-text"> <b>Description: </b>
+              <%= products[0].description %>
+            </p>
+
+            <div class="card-body">
+              <div class="input-group quantity-input">
+                <button class="btn btn-primary add-to-cart-btn" style="align-content: start; width: 150px;">Add to
+                  Cart</button>
+                <button class="btn btn-danger decrease-quantity" style="margin-left: 200px;">-</button>
+                <span class="quantity" style="padding-left: 20px; padding-right: 20px; text-align: center;">0</span>
+                <button class="btn btn-success increase-quantity">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div id="product1Carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="/<%= products[1].images[0] %>" class="card-img-top" alt="Product 2 Image 1">
+            </div>
+            <div class="carousel-item">
+              <img src="/<%= products[1].images[1] %>" class="card-img-top" alt="Product 2 Image 2">
+            </div>
+            <div class="carousel-item">
+              <img src="/<%= products[1].images[2] %>" class="card-img-top" alt="Product 2 Image 3">
+            </div>
+          </div>
+          <a class="carousel-control-prev" href="#product1Carousel" role="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#product1Carousel" role="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </a>
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= products[1].title %>
+            </h5>
+            <p class="card-text">Price: $<%= products[1].price %>
+            </p>
+
+            <div class="rating">
+              <% const rating2=products[1].rating; %>
+                <% const wholeStars2=Math.floor(rating2); %>
+                  <% const decimalPart2=rating2 % 1; %>
+                    <% for (let i=0; i < wholeStars2; i++) { %>
+                      <span class="star">&#9733;</span>
+                      <% } %>
+                        <% if (decimalPart2> 0) { %>
+                          <span class="star empty">&#9733;</span>
+                          <% } else { %>
+                            <span class="star empty ash">&#9733;</span>
+                            <% } %>
+                              <span class="rating-text">(<%= rating2 %>)</span>
+            </div>
+
+            <p class="card-text"> <b>Description: </b>
+              <%= products[1].description %>
+            </p>
+
+            <div class="card-body">
+              <div class="input-group quantity-input">
+                <button class="btn btn-primary add-to-cart-btn2" style="align-content: start; width: 150px;">Add to
+                  Cart</button>
+                <button class="btn btn-danger decrease-quantity2" style="margin-left: 200px;">-</button>
+                <span class="quantity2" style="padding-left: 20px; padding-right: 20px; text-align: center;">0</span>
+                <button class="btn btn-success increase-quantity2">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div id="product1Carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="/<%= products[2].images[0] %>" class="card-img-top" alt="Product 3 Image 1">
+            </div>
+            <div class="carousel-item">
+              <img src="/<%= products[2].images[1] %>" class="card-img-top" alt="Product 3 Image 2">
+            </div>
+            <div class="carousel-item">
+              <img src="/<%= products[2].images[2] %>" class="card-img-top" alt="Product 3 Image 3">
+            </div>
+          </div>
+          <a class="carousel-control-prev" href="#product1Carousel" role="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#product1Carousel" role="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </a>
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= products[2].title %>
+            </h5>
+            <p class="card-text">Price: $<%= products[2].price %>
+            </p>
+
+            <div class="rating">
+              <% const rating3=products[2].rating; %>
+                <% const wholeStars3=Math.floor(rating3); %>
+                  <% const decimalPart3=rating3 % 1; %>
+                    <% for (let i=0; i < wholeStars3; i++) { %>
+                      <span class="star">&#9733;</span>
+                      <% } %>
+                        <% if (decimalPart3> 0) { %>
+                          <span class="star empty">&#9733;</span>
+                          <% } else { %>
+                            <span class="star empty ash">&#9733;</span>
+                            <% } %>
+                              <span class="rating-text">(<%= rating3 %>)</span>
+            </div>
+
+            <p class="card-text"><b>Description: </b>
+              <%= products[2].description %>
+            </p>
+
+            <div class="card-body">
+              <div class="input-group quantity-input">
+                <button class="btn btn-primary add-to-cart-btn3" style="align-content: start; width: 150px;">Add to
+                  Cart</button>
+                <button class="btn btn-danger decrease-quantity3" style="margin-left: 200px;">-</button>
+                <span class="quantity3" style="padding-left: 20px; padding-right: 20px; text-align: center;">0</span>
+                <button class="btn btn-success increase-quantity3">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const decreaseButton = document.querySelector('.decrease-quantity');
+        const increaseButton = document.querySelector('.increase-quantity');
+        const quantityElement = document.querySelector('.quantity');
+        const addToCartButton = document.querySelector('.add-to-cart-btn');
+        const cartBadge = document.querySelector('.cart-badge');
+
+
+        const decreaseButton2 = document.querySelector('.decrease-quantity2');
+        const increaseButton2 = document.querySelector('.increase-quantity2');
+        const quantityElement2 = document.querySelector('.quantity2');
+        const addToCartButton2 = document.querySelector('.add-to-cart-btn2');
+
+
+        const decreaseButton3 = document.querySelector('.decrease-quantity3');
+        const increaseButton3 = document.querySelector('.increase-quantity3');
+        const quantityElement3 = document.querySelector('.quantity3');
+        const addToCartButton3 = document.querySelector('.add-to-cart-btn3');
+
+        const quantityInput1 = document.getElementById("quantityInput1");
+        const quantityInput2 = document.getElementById("quantityInput2");
+        const quantityInput3 = document.getElementById("quantityInput3");
+
+
+        let quantity1 = 0;
+        let quantity2 = 0;
+        let quantity3 = 0;
+        let cartTotal = 0;
+
+        // when user clicks on "-" button for first item
+        decreaseButton.addEventListener('click', function () {
+          if (quantity1 > 0) {
+            quantity1--;
+            quantityElement.textContent = quantity1;
+            updateCartBadge();
+          }
+          updateAddToCartButton();
+        });
+
+        // when user clicks on "+" button for first item
+        increaseButton.addEventListener('click', function () {
+          quantity1++;
+          quantityElement.textContent = quantity1;
+          updateCartBadge();
+          updateAddToCartButton();
+        });
+
+        // when user clicks on "add to cart" button for first item
+        addToCartButton.addEventListener('click', function () {
+          quantity1++;
+          quantityElement.textContent = quantity1;
+          updateCartBadge();
+          updateAddToCartButton();
+        });
+
+
+        decreaseButton2.addEventListener('click', function () {
+          if (quantity2 > 0) {
+            quantity2--;
+            quantityElement2.textContent = quantity2;
+            updateCartBadge();
+          }
+
+          updateAddToCartButton2();
+        });
+
+        increaseButton2.addEventListener('click', function () {
+          quantity2++;
+          quantityElement2.textContent = quantity2;
+          updateCartBadge();
+          updateAddToCartButton2();
+
+        });
+
+        addToCartButton2.addEventListener('click', function () {
+          quantity2++;
+          quantityElement2.textContent = quantity2;
+          updateCartBadge();
+          updateAddToCartButton2();
+
+        });
+
+        decreaseButton3.addEventListener('click', function () {
+          if (quantity3 > 0) {
+            quantity3--;
+            quantityElement3.textContent = quantity3;
+            updateCartBadge();
+          }
+          updateAddToCartButton3();
+        });
+
+        increaseButton3.addEventListener('click', function () {
+          quantity3++;
+          quantityElement3.textContent = quantity3;
+          updateCartBadge();
+          updateAddToCartButton3();
+        });
+
+        addToCartButton3.addEventListener('click', function () {
+          quantity3++;
+          quantityElement3.textContent = quantity3;
+          updateCartBadge();
+          updateAddToCartButton3();
+        });
+
+        function updateAddToCartButton() {
+          if (quantity1 > 0) {
+            addToCartButton.textContent = 'Added';
+          } else {
+            addToCartButton.textContent = 'Add to Cart';
+          }
+        };
+
+        function updateAddToCartButton3() {
+          if (quantity3 > 0) {
+            addToCartButton3.textContent = 'Added';
+          } else {
+            addToCartButton3.textContent = 'Add to Cart';
+          }
+        };
+
+        function updateAddToCartButton2() {
+          if (quantity2 > 0) {
+            addToCartButton2.textContent = 'Added';
+          } else {
+            addToCartButton2.textContent = 'Add to Cart';
+          }
+        };
+
+        // to change number in cart badge
+        function updateCartBadge() {
+          cartBadge.textContent = quantity1 + quantity2 + quantity3;
+          quantityInput1.value = quantity1;
+          quantityInput2.value = quantity2;
+          quantityInput3.value = quantity3;
+        }
+      });
+
+    </script>
+
+
+    <script>
+
+      function confirmLogout() {
+        if (window.confirm("Are you sure you want to logout?")) {
+          logout();
+        }
+      }
+
+      function logout() {
+        window.location.href = "/logout";
+      }
+
+
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script src="/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

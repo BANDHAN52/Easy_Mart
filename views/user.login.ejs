@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Easy Mart</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <style>
+    /* Custom styles */
+    .navbar-brand {
+      font-weight: bold;
+    }
+    .navbar-nav .nav-link {
+      color: #fff;
+    }
+    .navbar-nav .nav-link:hover {
+      opacity: 0.8;
+    }
+    .navbar-custom {
+      background: linear-gradient(to right, #5D26C1, #a17fe0);
+    }
+  </style>
+
+
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+    <div class="container">
+      <a class="navbar-brand" href="/">Easy Mart</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/api/bank/login">Bank</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/api/supplier/login">Supplier</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row justify-content-center mt-5">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title text-center">Customer Login</h3>
+          </div>
+          <div class="card-body">
+            <form action="/api/user" method="POST">
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">Login</button>
+              </div>
+            </form>
+            <div class="text-center mt-3">
+              <p>Don't have an account? <a href="/api/user/register">Register</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% if(errorMessage){ %>
+    <h1 style="color: red; text-align: center; margin-top: 100px;"><%= errorMessage %></h1>
+  <% } %>
+
+  <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

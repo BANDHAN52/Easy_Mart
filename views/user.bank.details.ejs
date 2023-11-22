@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bank Accout Details</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <style>
+    /* Custom styles */
+    .navbar-brand {
+      font-weight: bold;
+    }
+    .navbar-nav .nav-link {
+      color: #fff;
+    }
+    .navbar-nav .nav-link:hover {
+      opacity: 0.8;
+    }
+    .navbar-custom {
+      background: linear-gradient(to right, #5D26C1, #a17fe0);
+    }
+  </style>
+
+
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+    <div class="container">
+      <a class="navbar-brand" href="/">Easy Mart</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/help">Help</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row justify-content-center mt-5">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title text-center">User bank account details</h3>
+          </div>
+          <div class="card-body">
+            <form action="/api/user/bank_details" method="POST">
+              <div class="mb-3">
+                <label for="accountNumber" class="form-label">Bank account number</label>
+                <input type="number" class="form-control" id="accountNumber" name="accountNumber" required>
+              </div>
+              <div class="mb-3">
+                <label for="bankPassword" class="form-label">Bank Password</label>
+                <input type="text" class="form-control" id="bankPassword" name="bankPassword" required>
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+            </form>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

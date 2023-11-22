@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order History</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+  <style>
+
+    /* Custom styles */
+    .navbar-brand {
+      font-weight: bold;
+    }
+    .navbar-nav .nav-link {
+      color: #fff;
+    }
+    .navbar-nav .nav-link:hover {
+      opacity: 0.8;
+    }
+    .navbar-custom {
+      background: linear-gradient(to right, #5D26C1, #a17fe0);
+      padding: 10px 80px;
+    }
+
+    /* Sticky navbar */
+    .fixed-top {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  height: 60px; /* Adjust the height as needed */
+}
+
+    .container-fluid {
+      padding: 50px;
+    }
+
+    .table {
+      margin-bottom: 0;
+    }
+
+    th,
+    td {
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .status-accepted {
+    color: green;
+  }
+  .status-rejected {
+    color: red;
+  }
+  .status-supplied {
+    color: blue;
+  }
+  .status-pending {
+    color: orange;
+  }
+
+  </style>
+</head>
+
+<body style="margin-top: 50px;">
+
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+    <div class="container-fluid" style="padding-right: 80px; padding-left: 80px;">
+      <a class="navbar-brand" style="margin-right: 100px;" href="/api/user/home">Easy Mart</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          
+        
+
+          <li class="nav-item dropdown">
+
+                <% if(usersName){ %>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <%= usersName %>
+                  </a>
+                  <% }else{ %>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    not user
+                  </a>
+                  <% } %>
+
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="/api/user/orders">Orders</a></li>
+              <li><a class="dropdown-item" href="/api/bank/login">Bank</a></li>
+              <li><a class="dropdown-item" href="#">Edit Profile</a></li>
+              <li><a class="dropdown-item" href="#">Help</a></li>
+              <li><a class="dropdown-item" href="#">About</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" href="/">Logout</a>
+              </li>
+              
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+
+
+
+
+
+  <div class="container-fluid">
+    <h1>Order History</h1>
+    <div class="row">
+      <div class="container-fluid">
+        <% if (orders.length > 0) { %>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th >Products</th>
+                <th>Total Price</th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let i = 0; i < orders.length; i++) { %>
+              <tr>
+                <td><%= orders[i]._id %></td>
+                <td><%= orders[i].createdOn %></td>
+                <td>
+                    <% if (orders[i].status === 'accepted') { %>
+                      <span class="status-accepted"><%= orders[i].status %></span>
+                    <% } else if (orders[i].status === 'rejected') { %>
+                      <span class="status-rejected"><%= orders[i].status %></span>
+                    <% } else if (orders[i].status === 'supplied') { %>
+                      <span class="status-supplied"><%= orders[i].status %></span>
+                    <% } else if (orders[i].status === 'pending') { %>
+                      <span class="status-pending"><%= orders[i].status %></span>
+                    <% } %>
+                  </td>
+                  
+
+                <td>
+                    <% if (orders[i].quantity1 > 0) { %>
+                        <div>
+                          <span><%= products[0].title %>,</span>
+                          <span>&nbsp;&nbsp;&nbsp;&nbsp;<b>Quantity</b>: <%= orders[i].quantity1 %>,</span>
+                          <span>&nbsp;&nbsp;&nbsp;&nbsp;<b>Price</b>: $<%= products[0].price.toFixed(2) %></span><br>
+                        </div>
+                      <% } %>
+                      
+                      <% if (orders[i].quantity2 > 0) { %>
+                        <div>
+                          <span><%= products[1].title %>,</span>
+                          <span>&nbsp;&nbsp;&nbsp;&nbsp;<b>Quantity</b>: <%= orders[i].quantity2 %>,</span>
+                          <span>&nbsp;&nbsp;&nbsp;&nbsp;<b>Price</b>: $<%= products[1].price.toFixed(2) %></span><br>
+                        </div>
+                      <% } %>
+                      
+                      <% if (orders[i].quantity3 > 0) { %>
+                        <div>
+                          <span><%= products[2].title %>,</span>
+                          <span>&nbsp;&nbsp;&nbsp;&nbsp;<b>Quantity</b>: <%= orders[i].quantity3 %>,</span>
+                          <span>&nbsp;&nbsp;&nbsp;&nbsp;<b>Price</b>: $<%= products[2].price.toFixed(2) %></span>
+                        </div>
+                      <% } %>
+                      
+                      
+                </td>
+                <td>$<%= orders[i].amount.toFixed(2) %></td>
+                
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+        <% } else { %>
+        <p>No orders found.</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
